@@ -7,6 +7,34 @@
 Servicio REST para la gestión de `Categoría` con operaciones **CRUD** completas,
 documentado con **Swagger/OpenAPI** y desplegable con **Docker Compose**.
 
+## Integrantes — Grupo AKETOY
+
+| # | Apellidos y Nombres |
+|---|---------------------|
+| 1 | Abatte Kelly |
+| 2 | Barcia Adrian |
+| 3 | Huambo Cesar |
+| 4 | Totoy Victor |
+
+**Docente:** Guillermo Pizarro
+**Repositorio:** https://github.com/BarciaSchool/T02.03
+
+## Arquitectura en capas — Mapeo UML (Spring) → FastAPI
+
+El backend replica el esquema de la **Figura 1** del enunciado (modelo → repositorio → servicio → controlador):
+
+| Componente UML (Spring) | Equivalente FastAPI | Archivo |
+|---|---|---|
+| `@Entity @Table model.Categoria` | Modelo SQLAlchemy `Categoria` | `app/models/categoria.py` |
+| `CrudRepository` | Clase genérica `CrudRepository[T]` | `app/repositories/base.py` |
+| `CategoriaRepository` | `CategoriaRepository(CrudRepository[Categoria])` | `app/repositories/categoria.py` |
+| `CategoriaService` (interface) | Clase abstracta `CategoriaService(ABC)` | `app/services/categoria.py` |
+| `CategoriaServiceImpl` (`@Service`) | `CategoriaServiceImpl(CategoriaService)` | `app/services/categoria.py` |
+| `CategoriaRestController` (`@RestController`) | `APIRouter` | `app/controllers/categoria.py` |
+| `ErrorRest` / `ResponseRest<T>` | Modelos Pydantic | `app/schemas/response.py` |
+| `ResponseEntity` | `JSONResponse` + `status_code` | controlador |
+| `@Autowired` | `Depends(...)` | `app/dependencies.py` |
+
 ## Endpoints
 
 Base path: `/api/v1/categorias`
