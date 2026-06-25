@@ -8,3 +8,8 @@ venv/
 .mypy_cache/
 *.egg-info/
 .DS_Store
+
+# Material de instrucciones y entregables generados (no forman parte del repo)
+ENTREGABLES_T02_03.md
+*.docx
+T02_03_Grupo*.pdf
