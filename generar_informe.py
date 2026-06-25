@@ -57,7 +57,7 @@ def h(doc, texto, size=13):
     return p
 
 
-def main():
+def build(archivo_estudiante):
     doc = Document()
     style = doc.styles["Normal"]
     style.font.name = "Calibri"
@@ -123,7 +123,7 @@ def main():
     # 6. Entregables
     h(doc, "6. Entregables")
     doc.add_paragraph(
-        f"6.1. Archivo en PDF: T02_03_Grupo{CONFIG['grupo']}_{CONFIG['archivo_estudiante']}.pdf",
+        f"6.1. Archivo en PDF: T02_03_Grupo{CONFIG['grupo']}_{archivo_estudiante}.pdf",
         style="List Bullet",
     )
     doc.add_paragraph(
@@ -180,9 +180,18 @@ def main():
         for i, v in enumerate(fila):
             celdas[i].text = v
 
-    nombre = f"T02_03_Grupo{CONFIG['grupo']}_{CONFIG['archivo_estudiante']}.docx"
+    nombre = f"T02_03_Grupo{CONFIG['grupo']}_{archivo_estudiante}.docx"
     doc.save(nombre)
     print(f"Generado: {nombre}")
+    return nombre
+
+
+def main():
+    # Un informe por integrante (la carga al AVAC es individual).
+    # archivo_estudiante = "ApellidoNombre" (sin espacios), a partir de "Apellido Nombre".
+    for integ in CONFIG["integrantes"]:
+        archivo_estudiante = integ.replace(" ", "")
+        build(archivo_estudiante)
 
 
 if __name__ == "__main__":
