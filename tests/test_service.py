@@ -78,3 +78,12 @@ def test_eliminar_404():
     repo.exists_by_id.return_value = False
     resp = CategoriaServiceImpl(repo).eliminar(99)
     assert resp.errors[0].codigo == 404
+
+
+# --- Demostración de pytest-mock (fixture `mocker`) ---
+def test_consultar_con_pytest_mock(mocker):
+    repo = mocker.Mock()
+    repo.find_all.return_value = []
+    resp = CategoriaServiceImpl(repo).consultar()
+    assert resp.data == []
+    repo.find_all.assert_called_once()
