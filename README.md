@@ -77,11 +77,37 @@ cp .env.example .env      # ajustar DATABASE_URL=sqlite:///./categorias.db
 uvicorn app.main:app --reload
 ```
 
-## Pruebas
+## Pruebas unitarias y cobertura (Tarea T02.04)
+
+Suite de pruebas automáticas por capa, con análisis de cobertura **≥ 60%** exigido
+automáticamente por `--cov-fail-under=60` (cobertura lograda: **~98%**).
 
 ```bash
-pytest -v
+pip install -r requirements-dev.txt
+pytest                       # ejecuta toda la suite + reporte de cobertura
 ```
+
+El reporte HTML queda en `htmlcov/index.html`.
+
+### Frameworks de testing
+
+| Framework | Uso en el proyecto |
+|---|---|
+| **Pytest** | Ejecutor principal de todas las pruebas |
+| **unittest / unittest.mock** | Pruebas estilo `TestCase` y simulación de dependencias (equivalente de Mockito) |
+| **pytest-mock** | Fixture `mocker` para mocks (capa de servicio) |
+| **doctest** | Valida los ejemplos de los docstrings en `app/utils.py` |
+| **Coverage.py** (vía `pytest-cov`) | Mide el % de cobertura y exige el umbral del 60% |
+
+### Estrategia por capa
+
+| Capa | Tipo de prueba | Archivo |
+|---|---|---|
+| Repositorio | Integración con SQLite en memoria (sesión real) | `tests/test_repository.py` |
+| Servicio | Unitarias con mocks (lógica de negocio + ramas 404) | `tests/test_service.py` |
+| Controlador | Integración con `TestClient` (endpoints, 404, 422) | `tests/test_controller.py` |
+| Schemas | Validación de Pydantic | `tests/test_schemas.py` |
+| Utilidades | Doctest + estilo `unittest.TestCase` | `tests/test_doctests.py`, `tests/test_unittest_style.py` |
 
 ## Estructura
 
@@ -94,9 +120,13 @@ app/
 ├── schemas/           # Pydantic: categoria.py + response.py
 ├── repositories/      # CrudRepository genérico + CategoriaRepository
 ├── services/          # CategoriaService (ABC) + CategoriaServiceImpl
-└── controllers/       # Router REST
-tests/                 # conftest.py + test_categoria.py
+├── controllers/       # Router REST
+└── utils.py           # Utilidades de dominio (con doctests)
+tests/                 # conftest.py + pruebas por capa (repo/service/controller/schemas/doctest/unittest)
 docs/                  # requerimientos.md, diseno.md, tareas.md
+pytest.ini             # Config de pytest + cobertura (--cov-fail-under=60)
+.coveragerc            # Exclusiones del análisis de cobertura
+requirements-dev.txt   # Dependencias de testing
 ```
 
 ## Documentación
