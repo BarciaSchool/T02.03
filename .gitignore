@@ -9,7 +9,13 @@ venv/
 *.egg-info/
 .DS_Store
 
+# Cobertura
+.coverage
+htmlcov/
+
 # Material de instrucciones y entregables generados (no forman parte del repo)
 ENTREGABLES_T02_03.md
+TASK2.md
 *.docx
 T02_03_Grupo*.pdf
+T02_04_Grupo*.pdf
